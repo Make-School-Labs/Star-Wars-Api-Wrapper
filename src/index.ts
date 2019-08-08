@@ -16,6 +16,7 @@ async function getPerson(personId: number) {
   try {
     // Make person API call
     const personUrl = `${BASE_URL}/people/${personId}/`;
+    console.log(personUrl);
     const personResponse = await fetch(personUrl);
     const personJson: PersonJSON = await personResponse.json();
 

@@ -1,32 +1,16 @@
-declare class Person {
-    name: string;
-    constructor({ name }: {
-        name: string;
-    });
-}
-declare class Planet {
-    name: string;
-    rotationPeriod: number;
-    orbitalPeriod: number;
-    diameter: number;
-    climate: string;
-    gravity: string;
-    terrain: string;
-    population: number;
-    residents: Person[];
-    constructor({ name, rotation_period, orbital_period, diameter, climate, gravity, terrain, population }: {
-        name: string;
-        rotation_period: string;
-        orbital_period: string;
-        diameter: string;
-        climate: string;
-        gravity: string;
-        terrain: string;
-        population: string;
-    });
-    getName(): string;
-    setResidents(residents: Person[]): void;
-}
-declare function getPerson(personId: number): Promise<void>;
+import { Person } from './person';
+import { Planet } from './planet';
+/**
+ * Returns a Person object, including their species and the films they appear
+ * in.
+ *
+ * @param personId The id of the person you're searching for.
+ */
+declare function getPerson(personId: number): Promise<Person>;
+/**
+ * Returns a Planet object, including the residents who live on that planet.
+ *
+ * @param personId The id of the person you're searching for.
+ */
 declare function getPlanet(planetId: number): Promise<Planet>;
-export { Person, Planet, getPerson, getPlanet };
+export { getPerson, getPlanet };
