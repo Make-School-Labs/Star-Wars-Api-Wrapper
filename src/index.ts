@@ -7,42 +7,41 @@ import { PlanetJSON, Planet } from './planet';
 const BASE_URL = 'https://swapi.co/api';
 
 /**
- * Returns a Person object, including their species and the films they appear 
+ * Returns a Person object, including their species and the films they appear
  * in.
- * 
+ *
  * @param personId The id of the person you're searching for.
  */
 async function getPerson(personId: number) {
   try {
     // Make person API call
-    const url = `${BASE_URL}/people/${personId}/`;
-    const response = await fetch(url);
-    const json: PersonJSON = await response.json();
+    const personUrl = `${BASE_URL}/people/${personId}/`;
+    const personResponse = await fetch(personUrl);
+    const personJson: PersonJSON = await personResponse.json();
 
     // Construct person
-    const person: Person = new Person(json);
+    const person: Person = new Person(personJson);
 
     // Add species
-    const speciesUrl: string = json.species[0];
+    const speciesUrl: string = personJson.species[0];
     const speciesResponse = await fetch(speciesUrl);
     const speciesJson: SpeciesJSON = await speciesResponse.json();
 
     person.setSpecies(new Species(speciesJson));
 
     // Add films
-    const filmUrls: string[] = json.films;
-    const filmJson = await Promise.all(filmUrls.map((url) => {
-      return fetch(url).then((response) => response.json());
+    const filmUrls: string[] = personJson.films;
+    const filmJson = await Promise.all(filmUrls.map(async (url: string) => {
+      const response = await fetch(url);
+      return response.json();
     }));
-    const filmTitles = filmJson.map((json: FilmJSON) => {
-      return json.title;
-    });
+    const filmTitles = filmJson.map((json: FilmJSON) => json.title);
     person.setFilms(filmTitles);
 
     return person;
   } catch (error) {
     // Handle error
-    console.log(error);
+    console.error(error);
     return null;
   }
 }
@@ -55,33 +54,30 @@ async function getPerson(personId: number) {
 async function getPlanet(planetId: number): Promise<Planet> {
   try {
     // Make planet API call
-    const url = `${BASE_URL}/planets/${planetId}/`;
-    const response = await fetch(url);
-    const json: PlanetJSON = await response.json();
+    const planetUrl = `${BASE_URL}/planets/${planetId}/`;
+    const planetResponse = await fetch(planetUrl);
+    const planetJson: PlanetJSON = await planetResponse.json();
 
     // Construct planet
-    const planet: Planet = new Planet(json);
+    const planet: Planet = new Planet(planetJson);
 
     // Make people API calls
-    const peopleUrls: string[] = json.residents;
-    const peopleJson = await Promise.all(peopleUrls.map((url) => {
-      return fetch(url).then(response => response.json());
+    const peopleUrls: string[] = planetJson.residents;
+    const peopleJson = await Promise.all(peopleUrls.map(async (url: string) => {
+      const response = await fetch(url);
+      return response.json();
     }));
 
     // Construct people & add to planet
-    const people = peopleJson.map((json: PersonJSON) => {
-      return new Person(json);
-    });
+    const people = peopleJson.map((json: PersonJSON) => new Person(json));
     planet.setResidents(people);
 
     return planet;
-
   } catch (error) {
     // Handle error
-    console.log(error);
+    console.error(error);
     return null;
   }
 }
-
 
 export { getPerson, getPlanet };

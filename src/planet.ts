@@ -1,4 +1,4 @@
-import { Person } from './Person';
+import { Person } from './person';
 
 /*
  * Interface for Planet data retrieved from SWAPI.
@@ -12,6 +12,7 @@ interface PlanetJSON {
   gravity: string;
   terrain: string;
   population: string;
+  residents: string[];
 }
 
 /**

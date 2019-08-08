@@ -40,8 +40,8 @@ class Species {
   constructor(json: SpeciesJSON) {
     this.name = json.name;
     this.classification = json.classification;
-    this.homeworld = json.homeworld == 'n/a' ? null : json.homeworld;
-    this.language = json.language == 'n/a' ? null : json.language;
+    this.homeworld = json.homeworld === 'n/a' ? null : json.homeworld;
+    this.language = json.language === 'n/a' ? null : json.language;
   }
 }
 
